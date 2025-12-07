@@ -7,10 +7,10 @@ import 'package:dartz/dartz.dart';
 import '../../core/core/errors/failure.dart';
 
 abstract class IPostsRepo {
-  Future<Either<Failure, List<PostModel>>> getPostsData({
+  Future<Either<Failure, List<PostModel>>> getPostsData();
+  Future<Either<Failure, List<PostModel>>> getPostData({
     required int? id
-});
-
+  });
 
 
 }

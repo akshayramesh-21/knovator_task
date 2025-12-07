@@ -29,6 +29,8 @@ mixin _$PostModel {
   int? get id => throw _privateConstructorUsedError;
   @JsonKey(name: "body")
   String? get body => throw _privateConstructorUsedError;
+  bool get isRead => throw _privateConstructorUsedError;
+  int get timerDuration => throw _privateConstructorUsedError;
 
   /// Serializes this PostModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,6 +52,8 @@ abstract class $PostModelCopyWith<$Res> {
     @JsonKey(name: "title") String? title,
     @JsonKey(name: "id") int? id,
     @JsonKey(name: "body") String? body,
+    bool isRead,
+    int timerDuration,
   });
 }
 
@@ -72,6 +76,8 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
     Object? title = freezed,
     Object? id = freezed,
     Object? body = freezed,
+    Object? isRead = null,
+    Object? timerDuration = null,
   }) {
     return _then(
       _value.copyWith(
@@ -91,6 +97,14 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
                 ? _value.body
                 : body // ignore: cast_nullable_to_non_nullable
                       as String?,
+            isRead: null == isRead
+                ? _value.isRead
+                : isRead // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            timerDuration: null == timerDuration
+                ? _value.timerDuration
+                : timerDuration // ignore: cast_nullable_to_non_nullable
+                      as int,
           )
           as $Val,
     );
@@ -111,6 +125,8 @@ abstract class _$$PostModelImplCopyWith<$Res>
     @JsonKey(name: "title") String? title,
     @JsonKey(name: "id") int? id,
     @JsonKey(name: "body") String? body,
+    bool isRead,
+    int timerDuration,
   });
 }
 
@@ -132,6 +148,8 @@ class __$$PostModelImplCopyWithImpl<$Res>
     Object? title = freezed,
     Object? id = freezed,
     Object? body = freezed,
+    Object? isRead = null,
+    Object? timerDuration = null,
   }) {
     return _then(
       _$PostModelImpl(
@@ -151,6 +169,14 @@ class __$$PostModelImplCopyWithImpl<$Res>
             ? _value.body
             : body // ignore: cast_nullable_to_non_nullable
                   as String?,
+        isRead: null == isRead
+            ? _value.isRead
+            : isRead // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        timerDuration: null == timerDuration
+            ? _value.timerDuration
+            : timerDuration // ignore: cast_nullable_to_non_nullable
+                  as int,
       ),
     );
   }
@@ -164,6 +190,8 @@ class _$PostModelImpl implements _PostModel {
     @JsonKey(name: "title") required this.title,
     @JsonKey(name: "id") required this.id,
     @JsonKey(name: "body") required this.body,
+    this.isRead = false,
+    this.timerDuration = 0,
   });
 
   factory _$PostModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -181,10 +209,16 @@ class _$PostModelImpl implements _PostModel {
   @override
   @JsonKey(name: "body")
   final String? body;
+  @override
+  @JsonKey()
+  final bool isRead;
+  @override
+  @JsonKey()
+  final int timerDuration;
 
   @override
   String toString() {
-    return 'PostModel(userId: $userId, title: $title, id: $id, body: $body)';
+    return 'PostModel(userId: $userId, title: $title, id: $id, body: $body, isRead: $isRead, timerDuration: $timerDuration)';
   }
 
   @override
@@ -195,12 +229,16 @@ class _$PostModelImpl implements _PostModel {
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.body, body) || other.body == body));
+            (identical(other.body, body) || other.body == body) &&
+            (identical(other.isRead, isRead) || other.isRead == isRead) &&
+            (identical(other.timerDuration, timerDuration) ||
+                other.timerDuration == timerDuration));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, userId, title, id, body);
+  int get hashCode =>
+      Object.hash(runtimeType, userId, title, id, body, isRead, timerDuration);
 
   /// Create a copy of PostModel
   /// with the given fields replaced by the non-null parameter values.
@@ -222,6 +260,8 @@ abstract class _PostModel implements PostModel {
     @JsonKey(name: "title") required final String? title,
     @JsonKey(name: "id") required final int? id,
     @JsonKey(name: "body") required final String? body,
+    final bool isRead,
+    final int timerDuration,
   }) = _$PostModelImpl;
 
   factory _PostModel.fromJson(Map<String, dynamic> json) =
@@ -239,6 +279,10 @@ abstract class _PostModel implements PostModel {
   @override
   @JsonKey(name: "body")
   String? get body;
+  @override
+  bool get isRead;
+  @override
+  int get timerDuration;
 
   /// Create a copy of PostModel
   /// with the given fields replaced by the non-null parameter values.
