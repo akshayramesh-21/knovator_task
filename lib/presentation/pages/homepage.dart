@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:knovator_test/application/bloc/posts/post_bloc.dart';
+import 'package:knovator_test/application/bloc/posts/post_event.dart';
 import 'package:knovator_test/domain/all_posts/post_model/post_model.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -201,7 +202,12 @@ class _PostItem extends StatelessWidget {
     
     return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
-        final remainingTime = post.timerDuration;
+        // Find the current post in the state to get the updated timer duration
+        final currentPost = state.allPosts.firstWhere(
+          (p) => p.id == post.id,
+          orElse: () => post,
+        );
+        final remainingTime = currentPost.timerDuration;
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
           decoration: BoxDecoration(

@@ -11,8 +11,10 @@ import 'package:knovator_test/domain/all_posts/i_all_product_repo.dart';
 import 'package:knovator_test/domain/all_posts/post_model/post_model.dart';
 
 part 'post_bloc.freezed.dart';
-part 'post_event.dart';
-part 'post_state.dart';
+part 'post_event.freezed.dart';
+part 'post_event.g.dart';
+part 'post_state.freezed.dart';
+part 'post_state.g.dart';
 
 const String _postsKey = 'cached_posts';
 
@@ -25,11 +27,11 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   static const List<int> possibleDurations = [10, 20, 25]; // Possible timer durations in seconds
 
   PostBloc(this._iPostsRepo, this._prefs) : super(PostState.initial()) {
-    on<_GetPosts>(_onGetPosts);
-    on<_MarkAsRead>(_onMarkAsRead);
-    on<_UpdateTimerDuration>(_onUpdateTimerDuration);
-    on<_InitializeFromLocalStorage>(_onInitializeFromLocalStorage);
-    on<_SaveToLocalStorage>(_onSaveToLocalStorage);
+    on<GetPosts>(_onGetPosts);
+    on<MarkAsRead>(_onMarkAsRead);
+    on<UpdateTimerDuration>(_onUpdateTimerDuration);
+    on<InitializeFromLocalStorage>(_onInitializeFromLocalStorage);
+    on<SaveToLocalStorage>(_onSaveToLocalStorage);
 
     // Initialize from local storage when the bloc is created
     add(const PostEvent.initializeFromLocalStorage());
@@ -45,7 +47,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     return super.close();
   }
 
-  Future<void> _onGetPosts(_GetPosts event, Emitter<PostState> emit) async {
+  Future<void> _onGetPosts(GetPosts event, Emitter<PostState> emit) async {
     try {
       // Emit loading state
       emit(state.copyWith(
@@ -94,12 +96,12 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
-  void _onMarkAsRead(_MarkAsRead event, Emitter<PostState> emit) {
+  void _onMarkAsRead(MarkAsRead event, Emitter<PostState> emit) {
     final updatedPosts = state.allPosts.map((post) {
       if (post.id == event.postId) {
         // Cancel the timer when post is marked as read
         _cancelTimer(event.postId);
-        return post.copyWithReadStatus(true);
+        return post.copyWith(isRead: true);
       }
       return post;
     }).toList();
@@ -108,10 +110,10 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     add(const PostEvent.saveToLocalStorage());
   }
 
-  void _onUpdateTimerDuration(_UpdateTimerDuration event, Emitter<PostState> emit) {
+  void _onUpdateTimerDuration(UpdateTimerDuration event, Emitter<PostState> emit) {
     final updatedPosts = state.allPosts.map((post) {
       if (post.id == event.postId) {
-        return post.copyWithTimerDuration(event.duration);
+        return post.copyWith(timerDuration: event.duration);
       }
       return post;
     }).toList();
@@ -120,7 +122,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
 
   Future<void> _onInitializeFromLocalStorage(
-    _InitializeFromLocalStorage event,
+    InitializeFromLocalStorage event,
     Emitter<PostState> emit,
   ) async {
     try {
@@ -149,7 +151,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
 
   Future<void> _onSaveToLocalStorage(
-    _SaveToLocalStorage event,
+    SaveToLocalStorage event,
     Emitter<PostState> emit,
   ) async {
     try {

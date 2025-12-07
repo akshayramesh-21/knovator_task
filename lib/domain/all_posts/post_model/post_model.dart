@@ -1,6 +1,3 @@
-
-
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'post_model.freezed.dart';
@@ -21,14 +18,4 @@ class PostModel with _$PostModel {
   }) = _PostModel;
 
   factory PostModel.fromJson(Map<String, dynamic> json) => _$PostModelFromJson(json);
-  
-  // Helper method to create a copy with updated fields
-  PostModel copyWithReadStatus(bool isRead) {
-    return copyWith(isRead: isRead);
-  }
-  
-  // Helper method to create a copy with updated timer duration
-  PostModel copyWithTimerDuration(int duration) {
-    return copyWith(timerDuration: duration);
-  }
 }

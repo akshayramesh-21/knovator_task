@@ -1,4 +1,8 @@
-part of 'post_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:knovator_test/domain/all_posts/post_model/post_model.dart';
+
+part 'post_state.freezed.dart';
+part 'post_state.g.dart';
 
 @freezed
 class PostState with _$PostState {
@@ -11,31 +15,10 @@ class PostState with _$PostState {
   }) = _PostState;
 
   // Factory method for initial state
-  factory PostState.initial() {
-    return const PostState(
-      isLoading: false,
-      isError: false,
-      isSuccess: false,
-      allPosts: [],
-      isInitialized: false,
-    );
-  }
-  
-  // Method to check if a post is read
-  bool isPostRead(int postId) {
-    try {
-      return allPosts.firstWhere((post) => post.id == postId).isRead;
-    } catch (e) {
-      return false;
-    }
-  }
-  
-  // Method to get remaining time for a post
-  int getRemainingTime(int postId) {
-    try {
-      return allPosts.firstWhere((post) => post.id == postId).timerDuration;
-    } catch (e) {
-      return 0;
-    }
-  }
+  factory PostState.initial() => const PostState(
+        isLoading: false,
+        isError: false,
+        isSuccess: false,
+        allPosts: [],
+      );
 }
