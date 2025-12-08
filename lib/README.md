@@ -238,5 +238,3 @@ Response format:
 
 ---
 
-## Author
-Developed as part of Knovator technical assessment.
