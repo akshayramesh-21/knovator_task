@@ -184,15 +184,15 @@ class __$$PostModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$PostModelImpl implements _PostModel {
-  _$PostModelImpl({
+class _$PostModelImpl extends _PostModel {
+  const _$PostModelImpl({
     @JsonKey(name: "userId") required this.userId,
     @JsonKey(name: "title") required this.title,
     @JsonKey(name: "id") required this.id,
     @JsonKey(name: "body") required this.body,
     this.isRead = false,
     this.timerDuration = 0,
-  });
+  }) : super._();
 
   factory _$PostModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$PostModelImplFromJson(json);
@@ -254,8 +254,8 @@ class _$PostModelImpl implements _PostModel {
   }
 }
 
-abstract class _PostModel implements PostModel {
-  factory _PostModel({
+abstract class _PostModel extends PostModel {
+  const factory _PostModel({
     @JsonKey(name: "userId") required final int? userId,
     @JsonKey(name: "title") required final String? title,
     @JsonKey(name: "id") required final int? id,
@@ -263,6 +263,7 @@ abstract class _PostModel implements PostModel {
     final bool isRead,
     final int timerDuration,
   }) = _$PostModelImpl;
+  const _PostModel._() : super._();
 
   factory _PostModel.fromJson(Map<String, dynamic> json) =
       _$PostModelImpl.fromJson;

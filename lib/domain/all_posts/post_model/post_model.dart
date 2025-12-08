@@ -11,7 +11,9 @@ part 'post_model.g.dart';
 
 @freezed
 class PostModel with _$PostModel {
-  factory PostModel({
+  const PostModel._(); // Private constructor for custom methods
+  
+  const factory PostModel({
     @JsonKey(name: "userId") required int? userId,
     @JsonKey(name: "title") required String? title,
     @JsonKey(name: "id") required int? id,
@@ -22,9 +24,9 @@ class PostModel with _$PostModel {
 
   factory PostModel.fromJson(Map<String, dynamic> json) => _$PostModelFromJson(json);
   
-  // Helper method to create a copy with updated fields
-  PostModel copyWithReadStatus(bool isRead) {
-    return copyWith(isRead: isRead);
+  // Helper method to create a copy with updated read status
+  PostModel copyWithReadStatus(bool newIsRead) {
+    return copyWith(isRead: newIsRead);
   }
   
   // Helper method to create a copy with updated timer duration

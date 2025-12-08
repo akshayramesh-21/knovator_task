@@ -1,8 +1,4 @@
-
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:knovator_test/domain/all_posts/post_model/post_model.dart';
-
-part 'post_bloc.dart';
+part of 'post_bloc.dart';
 
 @freezed
 class PostEvent with _$PostEvent {
@@ -23,4 +19,16 @@ class PostEvent with _$PostEvent {
   
   // Save posts to local storage
   const factory PostEvent.saveToLocalStorage() = _SaveToLocalStorage;
+  
+  // Pause timer for a specific post (when scrolled out of view)
+  const factory PostEvent.pauseTimer(int postId) = _PauseTimer;
+  
+  // Resume timer for a specific post (when scrolled back into view)
+  const factory PostEvent.resumeTimer(int postId) = _ResumeTimer;
+  
+  // Pause all timers (when navigating to detail screen)
+  const factory PostEvent.pauseAllTimers() = _PauseAllTimers;
+  
+  // Resume all timers (when coming back from detail screen)
+  const factory PostEvent.resumeAllTimers() = _ResumeAllTimers;
 }

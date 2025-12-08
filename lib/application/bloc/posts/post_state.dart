@@ -2,6 +2,8 @@ part of 'post_bloc.dart';
 
 @freezed
 class PostState with _$PostState {
+  const PostState._(); // Private constructor for custom methods
+  
   const factory PostState({
     required bool isLoading,
     required bool isError,

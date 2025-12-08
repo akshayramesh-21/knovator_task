@@ -21,6 +21,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   final IPostsRepo _iPostsRepo;
   final SharedPreferences _prefs;
   final Map<int, Timer> _timers = {};
+  final Set<int> _pausedTimers = {}; // Track paused timers
 
   static const List<int> possibleDurations = [10, 20, 25]; // Possible timer durations in seconds
 
@@ -30,6 +31,10 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<_UpdateTimerDuration>(_onUpdateTimerDuration);
     on<_InitializeFromLocalStorage>(_onInitializeFromLocalStorage);
     on<_SaveToLocalStorage>(_onSaveToLocalStorage);
+    on<_PauseTimer>(_onPauseTimer);
+    on<_ResumeTimer>(_onResumeTimer);
+    on<_PauseAllTimers>(_onPauseAllTimers);
+    on<_ResumeAllTimers>(_onResumeAllTimers);
 
     // Initialize from local storage when the bloc is created
     add(const PostEvent.initializeFromLocalStorage());
@@ -224,5 +229,52 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   void _cancelTimer(int postId) {
     _timers[postId]?.cancel();
     _timers.remove(postId);
+    _pausedTimers.remove(postId);
+  }
+
+  void _onPauseTimer(_PauseTimer event, Emitter<PostState> emit) {
+    final postId = event.postId;
+    if (_timers.containsKey(postId) && !_pausedTimers.contains(postId)) {
+      _timers[postId]?.cancel();
+      _timers.remove(postId);
+      _pausedTimers.add(postId);
+    }
+  }
+
+  void _onResumeTimer(_ResumeTimer event, Emitter<PostState> emit) {
+    final postId = event.postId;
+    if (_pausedTimers.contains(postId)) {
+      _pausedTimers.remove(postId);
+      final post = state.allPosts.firstWhere(
+        (p) => p.id == postId,
+        orElse: () => PostModel(userId: null, title: null, id: null, body: null),
+      );
+      if (post.id != null && !post.isRead && post.timerDuration > 0) {
+        _startTimerForPost(post);
+      }
+    }
+  }
+
+  void _onPauseAllTimers(_PauseAllTimers event, Emitter<PostState> emit) {
+    // Pause all active timers (used when navigating away)
+    for (var entry in _timers.entries.toList()) {
+      entry.value.cancel();
+      _pausedTimers.add(entry.key);
+    }
+    _timers.clear();
+  }
+
+  void _onResumeAllTimers(_ResumeAllTimers event, Emitter<PostState> emit) {
+    // Resume all paused timers (used when coming back to list)
+    for (var postId in _pausedTimers.toList()) {
+      final post = state.allPosts.firstWhere(
+        (p) => p.id == postId,
+        orElse: () => PostModel(userId: null, title: null, id: null, body: null),
+      );
+      if (post.id != null && !post.isRead && post.timerDuration > 0) {
+        _startTimerForPost(post);
+      }
+    }
+    _pausedTimers.clear();
   }
 }
